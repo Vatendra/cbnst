@@ -39,11 +39,16 @@ void getEq(int n){
 }
 float getFloat(char coef[COEF_LENGTH]){
 	int len, i;
-	int decimal_flag=-1;
+	int decimal_flag=-1, fraction_flag = -1;
 	float coef_value = 0;
 	len = strlen(coef);
 	for(i=0;i<len;i++){
 		if(coef[i]>=48 && coef[i]<=57){
+			if(fraction_flag>=0){
+				fraction_flag = fraction_flag + (coef[i]-48);
+				fraction_flag = fraction_flag*10;
+				continue;
+			}
 			coef_value = coef_value + (coef[i]-48);
 		}
 		else if(coef[i]=='.'){
@@ -52,6 +57,9 @@ float getFloat(char coef[COEF_LENGTH]){
 		}
 		else if(coef[i]=='/'){
 			// do something here as well
+			coef_value = coef_value/10;
+			fraction_flag++;
+			printf("value at slash %f\n",coef_value);
 		}
 		if(decimal_flag>=0){
 			decimal_flag++;
@@ -64,5 +72,9 @@ float getFloat(char coef[COEF_LENGTH]){
 	else{
 		coef_value = coef_value/10;
 	}
-	printf("Value: %f",coef_value);
+	fraction_flag = fraction_flag/10;
+	if(fraction_flag>0){
+		coef_value = coef_value/fraction_flag;
+	}
+	printf("Value: %f\n",coef_value);
 }
